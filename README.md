@@ -1,6 +1,6 @@
 # Game of Life
 It's a simple example of implementation of game: Game Of Life.
-This game uses JavaFX.
+This game uses JavaFX and was compiled with JDK 11.
 
 To start game you need run one of .bat files in catalog: /out/artifacts/GameOfLife_jar/
 
