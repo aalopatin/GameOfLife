@@ -1,8 +1,6 @@
 package sample.logic;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class Universe {
@@ -10,9 +8,8 @@ public class Universe {
     private int rows;
     private int columns;
     private int[][] currentGeneration;
-    private static final int[][] CHEKCED_CELLS_ROW = new int[][]{{-1, -1, -1},{0, 0, 0},{1, 1, 1}};
-    private static final int[][] CHEKCED_CELLS_COLUMNS = new int[][]{{-1, 0, 1},{-1, 0, 1},{-1, 0, 1}};
-    private static final boolean[][] COUNTED_CELLS = new boolean[][]{{true, true, true},{true, false, true},{true, true, true}};
+    private static final int[][] CHECKED_CELLS_ROW = new int[][]{{-1, -1, -1},{0, 0, 0},{1, 1, 1}};
+    private static final int[][] CHECKED_CELLS_COLUMNS = new int[][]{{-1, 0, 1},{-1, 0, 1},{-1, 0, 1}};
 
     public Universe(int rows, int columns) {
         this.rows = rows;
@@ -33,7 +30,7 @@ public class Universe {
 
     public void nextGeneration(){
         int[][] nextGeneration = new int[rows][columns];
-        for (int i = 0; i < rows; i++)
+        for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 int countLive = countLiveNeighbours(i, j);
                 if (currentGeneration[i][j] == 1) {
@@ -42,15 +39,17 @@ public class Universe {
                     nextGeneration[i][j] = countLive == 3 ? 1 : 0;
                 }
             }
+        }
         currentGeneration = nextGeneration;
     }
 
     private void generateRandomField(){
         Random rand = new Random();
-        for (int i = 0; i < rows; i++)
+        for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 currentGeneration[i][j] = rand.nextInt(2);
             }
+        }
     }
 
     private void setPattern(String patternName){
@@ -68,11 +67,11 @@ public class Universe {
         int count = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                int checked_row = row + CHEKCED_CELLS_ROW[i][j];
-                int checked_column = column + CHEKCED_CELLS_COLUMNS[i][j];
-                if (COUNTED_CELLS[i][j] && isValidCell(checked_row, checked_column)) {
-                    if(currentGeneration[checked_row][checked_column] == 1)
-                        count++;
+                int checked_row = row + CHECKED_CELLS_ROW[i][j];
+                int checked_column = column + CHECKED_CELLS_COLUMNS[i][j];
+                if ((CHECKED_CELLS_ROW[i][j] != 0 || CHECKED_CELLS_COLUMNS[i][j] != 0)
+                        && isValidCell(checked_row, checked_column)) {
+                    if(currentGeneration[checked_row][checked_column] == 1) count++;
                 }
             }
         }
@@ -140,6 +139,14 @@ public class Universe {
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
                 };
                 break;
+            case "glider":
+                patternArr = new int[][]{
+                        {0, 0, 0, 0, 0},
+                        {0, 0, 0, 1, 0},
+                        {0, 1, 0, 1, 0},
+                        {0, 0, 1, 1, 0},
+                        {0, 0, 0, 0, 0}
+                };
         }
         return patternArr;
     }
